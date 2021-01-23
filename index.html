@@ -8,13 +8,47 @@
   <meta name="description" content="The omino feelings interceptor">
   <meta name="author" content="ivan lori">
 
+  <style>
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 50px;
+      height: 100vh;
+    }
+
+    .output {
+      flex: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .output .emoticon {
+      font-size: 170px;
+    }
+
+    .output .text {
+      font-size: 50px;
+    }
+
+    textarea {
+      padding: 10px;
+      border-radius: 5px;
+      resize: none;
+    }
+  </style>
+
 </head>
 
 <body>
-  <main>
-    <div id="js-output"></div>
-    <div style="float: right">
-      <textarea id="js-input" cols="50" rows="80"></textarea>
+  <main class="container">
+    <div>
+      <textarea id="js-input" cols="50" rows="20" placeholder="Write something here..."></textarea>
+    </div>
+    <div class="output">
+      <span class="emoticon" id="js-emoticon"></span>
+      <span class="text" id="js-text"></span>
     </div>
   </main>
   <script src="index.js"></script>
