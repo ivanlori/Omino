@@ -2,6 +2,7 @@
   const $input = document.getElementById("js-input");
   const $emoticonOutput = document.getElementById("js-emoticon");
   const $textOutput = document.getElementById("js-text");
+  let timeout = 0;
   const typeOfLaughs = [
     "ahah",
     "haha",
@@ -16,7 +17,7 @@
   const sequenceOfDots = "....";
   const emoticons = {
     grinningFace: "😁",
-    wearyFace: "😩",
+    angryFace: "😡",
     slightlySmiling: "🙂",
     faceTearsJoy: "😂",
     laughingFaceFloor: "🤣",
@@ -52,7 +53,10 @@
 
   // Check phrases like this: I AM ANGRY!!!!!
   const checkIfUserIsAngry = (value) => {
-    return checkExclamationMark(value) && checkUserUppercase(value);
+    return (
+      (checkExclamationMark(value) && checkUserUppercase(value)) ||
+      checkExclamationMark(value)
+    );
   };
 
   const setDefaultState = () => {
@@ -75,7 +79,7 @@
     checkUserLaugh(text);
 
     if (checkIfUserIsAngry(text)) {
-      setEmoticon(emoticons.wearyFace);
+      setEmoticon(emoticons.angryFace);
     } else if (checkUserUppercase(text)) {
       setEmoticon(emoticons.grinningFace);
     }
@@ -85,6 +89,10 @@
   setDefaultState();
 
   $input.addEventListener("keyup", (e) => {
-    setOutput(e);
+    clearTimeout(timeout);
+    // Check sentences when user stops typing
+    timeout = setTimeout(() => {
+      setOutput(e);
+    }, 800);
   });
 })();
