@@ -26,10 +26,6 @@
     $emoticonOutput.innerHTML = value;
   };
 
-  const setText = (value) => {
-    $textOutput.innerHTML = value;
-  };
-
   // Check user laughs
   const checkUserLaugh = (value) => {
     typeOfLaughs.find((laugh) => {
@@ -61,7 +57,7 @@
 
   const setDefaultState = () => {
     setEmoticon(emoticons.slightlySmiling);
-    $textOutput.innerHTML = "";
+    $textOutput.style.display = "none";
   };
 
   // Magic happens here :)
@@ -74,13 +70,13 @@
       return;
     }
 
+    $textOutput.style.display = "block";
+
     checkUserLaugh(text);
 
     if (checkIfUserIsAngry(text)) {
-      setText("Why are you angry?");
       setEmoticon(emoticons.wearyFace);
     } else if (checkUserUppercase(text)) {
-      setText("You are a boomer!");
       setEmoticon(emoticons.grinningFace);
     }
   };
