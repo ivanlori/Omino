@@ -2,16 +2,25 @@
   const $input = document.getElementById("js-input");
   const $emoticonOutput = document.getElementById("js-emoticon");
   const $textOutput = document.getElementById("js-text");
-
+  const typeOfLaughs = [
+    "ahah",
+    "haha",
+    "LOL",
+    "lol",
+    "ROTFL",
+    "rotfl",
+    "LMAO",
+    "lmao",
+  ];
   const sequenceOfExclamationMark = "!!";
-  const ANGRY = "angry";
-  const HAPPY = "happy";
+  const sequenceOfDots = "....";
   const emoticons = {
-    happy: "😁",
-    sad: "😩",
-    smile: "🙂",
+    grinningFace: "😁",
+    wearyFace: "😩",
+    slightlySmiling: "🙂",
+    faceTearsJoy: "😂",
+    laughingFaceFloor: "🤣",
   };
-  let exitFromSearchLaugh = false;
 
   const setEmoticon = (value) => {
     $emoticonOutput.innerHTML = value;
@@ -21,59 +30,63 @@
     $textOutput.innerHTML = value;
   };
 
-  // Check two types of laugh
+  // Check user laughs
   const checkUserLaugh = (value) => {
-    const typeOfLaugh1 = "ahah";
-    const typeOfLaugh2 = "haha";
+    typeOfLaughs.find((laugh) => {
+      // No match
+      if (value.search(laugh) === -1) return;
 
-    if (
-      (value.search(typeOfLaugh1) !== -1 ||
-        value.search(typeOfLaugh2) !== -1) &&
-      !exitFromSearchLaugh
-    ) {
-      exitFromSearchLaugh = true;
-      return true;
-    }
+      if (
+        typeOfLaughs.indexOf(laugh) === 0 ||
+        typeOfLaughs.indexOf(laugh) === 1
+      ) {
+        setEmoticon(emoticons.faceTearsJoy);
+      } else {
+        setEmoticon(emoticons.laughingFaceFloor);
+      }
+    });
   };
 
   const checkUserUppercase = (value) => value === value.toUpperCase();
 
-  // When a word has more than !! at the end
+  // Check when a word has more than !! at the end
   const checkExclamationMark = (value) => {
     return value.endsWith(sequenceOfExclamationMark);
   };
 
-  // For phrases like this: I AM ANGRY!!!!!
+  // Check phrases like this: I AM ANGRY!!!!!
   const checkIfUserIsAngry = (value) => {
     return checkExclamationMark(value) && checkUserUppercase(value);
   };
 
   const setDefaultState = () => {
-    setEmoticon(emoticons.smile);
+    setEmoticon(emoticons.slightlySmiling);
     $textOutput.innerHTML = "";
   };
 
   // Magic happens here :)
   const setOutput = (e) => {
-    const value = e.target.value;
+    const text = e.target.value;
 
     // if empty returns to the default state
-    if (!value) {
+    if (!text || text === " ") {
       setDefaultState();
-    } else if (checkUserLaugh(value)) {
-      setText("Your are funny!");
-      setEmoticon(emoticons.happy);
-    } else if (checkIfUserIsAngry(value)) {
+      return;
+    }
+
+    checkUserLaugh(text);
+
+    if (checkIfUserIsAngry(text)) {
       setText("Why are you angry?");
-      setEmoticon(emoticons.sad);
-    } else if (checkUserUppercase(value)) {
+      setEmoticon(emoticons.wearyFace);
+    } else if (checkUserUppercase(text)) {
       setText("You are a boomer!");
-      setEmoticon(emoticons.happy);
+      setEmoticon(emoticons.grinningFace);
     }
   };
 
   // Set default emoticon on start
-  setEmoticon(emoticons.smile);
+  setDefaultState();
 
   $input.addEventListener("keyup", (e) => {
     setOutput(e);
